@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import player.Player;
 
-public class Frame {
+public class Frame{
 	JFrame frame = new JFrame("Find the X-it");
 	JLabel title = new JLabel("Find the X-it");
 	JLabel remainingTime = new JLabel("Time Left : ");
@@ -119,7 +119,7 @@ public class Frame {
 				System.exit(1);
 			}
 		});
-
+		
 		btnExit.setVisible(false);
 		
 		frame.add(title);
