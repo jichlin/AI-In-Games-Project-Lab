@@ -11,6 +11,10 @@ public class Map {
 	public static int width = 20;
 	public static int height = 20;  
 	
+	public void randomizedMaze(){
+		
+	}
+	
 	public void printmap(){
 		for(int i = 0 ; i < height ; i++){
 			for(int j = 0 ;j < width ; j++){
@@ -26,7 +30,7 @@ public class Map {
 				map[i][j] = wall;
 			}
 		}
-
+		
 		for(int i = 1; i < height - 1 ; i++){
 			for(int j = 1 ; j < width - 1 ; j++){
 				map[i][j] = floor;

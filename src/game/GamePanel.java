@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import map.Map;
@@ -29,12 +30,12 @@ public class GamePanel extends JPanel implements Runnable , KeyListener{
 	int playerX = 1;
 	int playerY = 1;
 	Stats status = new Stats();
-	
+	Thread gameThread = new Thread(this);
+
 	public GamePanel(){
 		setSize(400, 400);
 		addKeyListener(this);
 		setFocusable(true);
-		Thread gameThread = new Thread(this);
 		gameThread.start();
 	}
 	
@@ -93,9 +94,11 @@ public class GamePanel extends JPanel implements Runnable , KeyListener{
 	void checkSpecialTile(){
 		if(map.map[playerY][playerX] == Map.coin){
 			status.setTime(status.getTime() + 5);
+			status.setCoinStepped(true);
 		}
 		else if(map.map[playerY][playerX] == Map.trap){
 			status.setLife(status.getLife() - 1);
+			status.setTrapStepped(true);
 		}
 		else if(map.map[playerY][playerX] == Map.goal){
 			status.setLevel(status.getLevel() + 1);
@@ -106,32 +109,43 @@ public class GamePanel extends JPanel implements Runnable , KeyListener{
 	public void keyPressed(KeyEvent k) {
 		// TODO Auto-generated method stub
 		int code =  k.getKeyCode();
-		if( code == KeyEvent.VK_W){
+		if( code == KeyEvent.VK_W && status.getPaused() != true){
 			if(map.map[playerY][playerX-1] != Map.wall){
 				map.map[playerY][playerX] = Map.floor;
 				playerX -= 1;
 			}
 		}
-		else if(code == KeyEvent.VK_S){
+		else if(code == KeyEvent.VK_S && status.getPaused() != true){
 			if(map.map[playerY][playerX+1] != Map.wall){
 				map.map[playerY][playerX] = Map.floor;
 				playerX += 1;
 			}
 		}
-		else if(code == KeyEvent.VK_A){
+		else if(code == KeyEvent.VK_A && status.getPaused() != true){
 			if(map.map[playerY-1][playerX] != Map.wall){
 				map.map[playerY][playerX] = Map.floor;
 				playerY -= 1;
 			}
 		}
-		else if(code == KeyEvent.VK_D){
+		else if(code == KeyEvent.VK_D && status.getPaused() != true){
 			if(map.map[playerY +1][playerX] != Map.wall){
 				map.map[playerY][playerX] = Map.floor;
 				playerY += 1;
 			}
 		}
+		else if(code == KeyEvent.VK_SPACE){
+			if(status.getPaused() == false){
+				status.setPaused(true);
+			}
+			else{
+				status.setPaused(false);				
+			}
+				
+			
+		}
 		checkSpecialTile();
-		map.map[playerY][playerX] = Map.player;		
+		map.map[playerY][playerX] = Map.player;	
+		map.printmap();
 	}
 
 	@Override

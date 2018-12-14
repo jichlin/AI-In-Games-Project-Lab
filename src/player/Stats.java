@@ -1,10 +1,14 @@
 package player;
 
 public class Stats {
-	int life = 1;
+	int life = 2;
 	int level = 1;
 	int time = 25;
 	int coin = 0;
+	boolean isPaused = false;
+	boolean trapStepped = false;
+	boolean coinStepped = false;
+	
 	public int getLife() {
 		return life;
 	}
@@ -30,7 +34,28 @@ public class Stats {
 	public void setCoin(int coin) {
 		this.coin = coin;
 	}
+	public boolean getPaused() {
+		return isPaused;
+	}
+	public void setPaused(boolean isPaused) {
+		this.isPaused = isPaused;
+	}
+	public boolean isTrapStepped() {
+		return trapStepped;
+	}
+	public void setTrapStepped(boolean trapStepped) {
+		this.trapStepped = trapStepped;
+	}
+	public boolean isCoinStepped() {
+		return coinStepped;
+	}
+	public void setCoinStepped(boolean coinStepped) {
+		this.coinStepped = coinStepped;
+	}
+	
+	
 
+	
 	
 	
 	

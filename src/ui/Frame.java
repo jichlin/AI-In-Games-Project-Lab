@@ -31,8 +31,9 @@ public class Frame extends JFrame implements Runnable{
 	JPanel panelHelp = new JPanel();
 	GamePanel gamePanel = new GamePanel();
 	Stats status = gamePanel.getStatus();
-
+	
 	JLabel title = new JLabel("Find the X-it");
+	JLabel pausedLabel = new JLabel("GAME PAUSED");
 	JLabel remainingTime = new JLabel("Time Left : ");
 	JLabel time = new JLabel(Integer.toString(status.getTime()));
 	JLabel remainingLife = new JLabel("Life : ");
@@ -58,6 +59,7 @@ public class Frame extends JFrame implements Runnable{
 	BufferedImage coinColor;
 	BufferedImage trapColor;	
 	BufferedImage floorColor;
+	Thread timeThread = new Thread(this);
 
 	void initComponents(){
 		try {
@@ -80,12 +82,14 @@ public class Frame extends JFrame implements Runnable{
 		setTitle("Find the X-it");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
-
+		
 		panelHelp.setSize(450, 600);
 		panelHelp.setLayout(null);
 		title.setFont(new Font(Font.SANS_SERIF,Font.ITALIC,25));
 		title.setBounds(100, 10, 200, 100);
-		
+		pausedLabel.setFont(new Font(Font.SANS_SERIF,Font.BOLD,20));
+		pausedLabel.setBounds(100, 50, 200, 100);
+		pausedLabel.setVisible(false);
 		remainingTime.setFont(new Font(Font.SANS_SERIF,Font.BOLD,15));
 		remainingTime.setBounds(100 , 90 , 200 , 100);
 		
@@ -145,6 +149,7 @@ public class Frame extends JFrame implements Runnable{
 		
 		btnExit.setVisible(false);
 		panelHelp.add(title);
+		panelHelp.add(pausedLabel);
 		panelHelp.add(remainingTime);
 		panelHelp.add(time);
 		panelHelp.add(remainingLife);
@@ -180,10 +185,8 @@ public class Frame extends JFrame implements Runnable{
 	}
 	
 	public Frame(){
-		
 		initComponents();
 		view();
-		Thread timeThread = new Thread(this);
 		timeThread.start();
 		
 	}
@@ -194,25 +197,44 @@ public class Frame extends JFrame implements Runnable{
 		try{
 			while(status.getTime() != -1){
 				status = gamePanel.getStatus();
-				if(status.getLife() == 0){
-					break;
+				if(status.getPaused() == false){
+					pausedLabel.setVisible(false);
+					if(status.isTrapStepped()){
+						JOptionPane.showMessageDialog(this, "You Lose a Life!", "Find the X-it", JOptionPane.INFORMATION_MESSAGE);
+						status.setTrapStepped(false);
+					}
+					gamePanel.setFocusable(true);
+					if(status.getLife() == 0){
+						break;
+					}
+					if(status.isCoinStepped()){
+						time.setText(Integer.toString(status.getTime()));
+					}
+
+					int t = status.getTime();
+					String temp = Integer.toString(t);
+					
+					int level = status.getLevel();
+					String l = Integer.toString(level);
+					
+					int life = status.getLife();
+					String li = Integer.toString(life);
+					
+					time.setText(temp);
+					this.life.setText(li);
+					this.currentLevel.setText(l);
+
+
+					
+					
+					status.setTime(t - 1);	
+					Thread.sleep(1000);
 				}
-				int t = status.getTime();
-				String temp = Integer.toString(t);
-				
-				int level = status.getLevel();
-				String l = Integer.toString(level);
-				
-				int life = status.getLife();
-				String li = Integer.toString(life);
-				
-				time.setText(temp);
-				this.life.setText(li);
-				this.currentLevel.setText(l);
-				
-				status.setTime(t - 1);	
-				Thread.sleep(1000);
+				else{
+					pausedLabel.setVisible(true);
+				}
 			}
+			this.life.setText("0");
 			JOptionPane.showConfirmDialog(this, "Game Over", "Try Again", JOptionPane.DEFAULT_OPTION);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
