@@ -135,6 +135,7 @@ public class Frame extends JFrame implements Runnable{
 		_this.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent me){
 				btnExit.setVisible(true);
+				_this.setForeground(Color.BLUE);
 			}
 		});
 		
