@@ -17,7 +17,6 @@ public class GamePanel extends JPanel implements Runnable , KeyListener{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 	Random rand = new Random();
 	Color white = new Color(255,255,255);
 	Color black = new Color(0,0,0);
@@ -27,10 +26,10 @@ public class GamePanel extends JPanel implements Runnable , KeyListener{
 	Color exit = new Color(0,195,229);
 	Map map = new Map();
 	Graphics2D g2d;
-	int playerX = 1;
-	int playerY = 1;
 	Stats status = new Stats();
 	Thread gameThread = new Thread(this);
+	int playerX = map.getPlayerX();
+	int playerY = map.getPlayerY();
 
 	public GamePanel(){
 		setSize(400, 400);
@@ -45,8 +44,8 @@ public class GamePanel extends JPanel implements Runnable , KeyListener{
 	
 	
 	public void drawMap(){
-		for(int i = 0 ; i < Map.height ; i++){
-			for(int j = 0 ; j < Map.width; j++){
+		for(int i = 0 ; i < Map.height + 2 ; i++){
+			for(int j = 0 ; j < Map.width + 2; j++){
 				if(map.map[i][j] == Map.wall){
 					g2d.setColor(black);
 				}
@@ -65,7 +64,7 @@ public class GamePanel extends JPanel implements Runnable , KeyListener{
 				else if(map.map[i][j] == Map.trap){
 					g2d.setColor(trap);
 				}
-				g2d.fillRect(i * Map.width , j * Map.height, 20, 20);
+				g2d.fillRect(i * 20 , j * 20, 20, 20);
 			}
 		}
 	}
@@ -99,9 +98,32 @@ public class GamePanel extends JPanel implements Runnable , KeyListener{
 		else if(map.map[playerY][playerX] == Map.trap){
 			status.setLife(status.getLife() - 1);
 			status.setTrapStepped(true);
+			status.setPaused(true);
+			JOptionPane.showMessageDialog(this, "You Lose a Life!", "Find the X-it", JOptionPane.INFORMATION_MESSAGE);
+			status.setTrapStepped(false);
+			status.setPaused(false);
+			if(status.getLife() == 0){
+				map.generateMaze();
+				status.setLife(3);
+				status.setTime(25);
+				status.setLevel(1);
+				playerX = map.getPlayerX();
+				playerY = map.getPlayerY();
+			}
+
 		}
 		else if(map.map[playerY][playerX] == Map.goal){
 			status.setLevel(status.getLevel() + 1);
+			status.setTime(status.getTime() - 3);
+			status.setLife(3);
+			if(status.getLevel() == 7){
+				JOptionPane.showMessageDialog(this, "You Won");
+				status.setLevel(1);
+			}
+			map.generateMaze();
+			playerX = map.getPlayerX();
+			playerY = map.getPlayerY();
+
 		}
 	}
 		
@@ -146,6 +168,9 @@ public class GamePanel extends JPanel implements Runnable , KeyListener{
 		checkSpecialTile();
 		map.map[playerY][playerX] = Map.player;	
 		map.printmap();
+		System.out.println("Y" + playerY);
+		System.out.println("X" + playerX );
+
 	}
 
 	@Override

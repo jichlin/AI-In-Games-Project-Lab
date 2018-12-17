@@ -1,10 +1,9 @@
 package player;
 
 public class Stats {
-	int life = 2;
+	int life = 3;
 	int level = 1;
 	int time = 25;
-	int coin = 0;
 	boolean isPaused = false;
 	boolean trapStepped = false;
 	boolean coinStepped = false;
@@ -28,12 +27,6 @@ public class Stats {
 		this.time = time;
 	}
 	
-	public int getCoin() {
-		return coin;
-	}
-	public void setCoin(int coin) {
-		this.coin = coin;
-	}
 	public boolean getPaused() {
 		return isPaused;
 	}

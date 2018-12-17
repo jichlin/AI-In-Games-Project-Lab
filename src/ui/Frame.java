@@ -93,19 +93,19 @@ public class Frame extends JFrame implements Runnable{
 		remainingTime.setFont(new Font(Font.SANS_SERIF,Font.BOLD,15));
 		remainingTime.setBounds(100 , 90 , 200 , 100);
 		
-		time.setFont(new Font(Font.SANS_SERIF,Font.BOLD,15));
+		time.setFont(new Font(Font.SANS_SERIF,Font.ITALIC,15));
 		time.setBounds(200 , 90 , 200 , 100);
 		
 		remainingLife.setFont(new Font(Font.SANS_SERIF,Font.BOLD,15));
 		remainingLife.setBounds(100 , 110 , 200 , 100);
 		
-		life.setFont(new Font(Font.SANS_SERIF,Font.BOLD,15));
+		life.setFont(new Font(Font.SANS_SERIF,Font.ITALIC,15));
 		life.setBounds(200 , 110 , 200 , 100);
 		
 		level.setFont(new Font(Font.SANS_SERIF,Font.BOLD,15));
 		level.setBounds(100 , 130 , 200 , 100);
 		
-		currentLevel.setFont(new Font(Font.SANS_SERIF,Font.BOLD,15));
+		currentLevel.setFont(new Font(Font.SANS_SERIF,Font.ITALIC,15));
 		currentLevel.setBounds(200,130,200,100);
 		
 		goal.setBounds(140,180,200,100);
@@ -176,7 +176,7 @@ public class Frame extends JFrame implements Runnable{
 		
 		split.setRightComponent(panelHelp);
 		split.setLeftComponent(gamePanel);
-		split.setDividerLocation(400);
+		split.setDividerLocation(460);
 		add(split);
 	}
 	
@@ -199,14 +199,14 @@ public class Frame extends JFrame implements Runnable{
 				status = gamePanel.getStatus();
 				if(status.getPaused() == false){
 					pausedLabel.setVisible(false);
-					if(status.isTrapStepped()){
-						JOptionPane.showMessageDialog(this, "You Lose a Life!", "Find the X-it", JOptionPane.INFORMATION_MESSAGE);
-						status.setTrapStepped(false);
-					}
 					gamePanel.setFocusable(true);
 					if(status.getLife() == 0){
 						break;
 					}
+					
+					if(status.isTrapStepped()){
+					}
+					
 					if(status.isCoinStepped()){
 						time.setText(Integer.toString(status.getTime()));
 					}
@@ -223,9 +223,6 @@ public class Frame extends JFrame implements Runnable{
 					time.setText(temp);
 					this.life.setText(li);
 					this.currentLevel.setText(l);
-
-
-					
 					
 					status.setTime(t - 1);	
 					Thread.sleep(1000);
